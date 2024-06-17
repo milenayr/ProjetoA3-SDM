@@ -52,12 +52,12 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/s
     }
   
      //DELETAR ENDEREÇO
-     @ApiOperation({ summary: 'Deletar um endereço' })
-     @ApiParam({ name: 'id', description: 'ID do endereço a ser deletado' })
-     @ApiResponse({ status: 204, description: 'Endereço deletado com sucesso.' })
-     @ApiResponse({ status: 404, description: 'Endereço não encontrado.' })
-      @Delete(":id")
-      @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiOperation({ summary: 'Deletar um endereço' })
+    @ApiParam({ name: 'id', description: 'ID do endereço a ser deletado' })
+    @ApiResponse({ status: 204, description: 'Endereço deletado com sucesso.' })
+    @ApiResponse({ status: 404, description: 'Endereço não encontrado.' })
+    @Delete(":id")
+    @HttpCode(HttpStatus.NO_CONTENT)
     async remove(@Param("id") id: number) {
       return await this.filiacaoService.remove(id);
     }

@@ -15,6 +15,13 @@ export class CreatePedidosDto {
     userId: number;
 
     @ApiProperty({
+        description: 'Id do endereço para envio de pedidos',
+        example: "1",
+      })
+    @IsInt()
+    filiacaoId: number;
+
+    @ApiProperty({
         description: 'Pizzas selecionadas',
         type: [CreateProdutoDto],
     })

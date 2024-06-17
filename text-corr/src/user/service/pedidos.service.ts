@@ -6,6 +6,7 @@ import { CreatePedidosDto, UpdatePedidosDto } from '../dto/pedidos.dto';
 import { Produto } from '../entity/produto.entity';
 import { User } from '../entity/user.entity';
 import { PrecoPizza } from '../enum/saborPizza';
+import { Filiacao } from '../entity/filiacao.entity';
 
 @Injectable()
 export class PedidoService {
@@ -16,19 +17,21 @@ export class PedidoService {
     private produtoRepository: Repository<Produto>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Filiacao)
+    private filiacaoRepository: Repository<Filiacao>,
   ) {}
 
   // Busca todos os pedidos
   async findAll(): Promise<Pedido[]> {
-    const pedidos = await this.pedidoRepository.find({ relations: ['produtos', 'user'] });
+    const pedidos = await this.pedidoRepository.find({ relations: ['produtos', 'user', 'filiacao'] });
     return pedidos.map(pedido => this.removeCircularReferences(pedido));
   }
 
   // Busca um pedido pelo id
   async findOne(id: number): Promise<Pedido> {
     const pedido = await this.pedidoRepository.findOne({
-      where: { id_pedido: id },
-      relations: ['produtos', 'user'],
+      where: { user_id: id },
+      relations: ['produtos', 'user', 'filiacao'],
     });
 
     if (!pedido) {
@@ -40,11 +43,16 @@ export class PedidoService {
   // Novo pedido
   async create(createPedidosDto: CreatePedidosDto): Promise<Pedido> { //o metodo create recebe o objeto createPedidosDto, e usa os dados do CreatePedidosDto
     try {
-      const { userId, produtos, dataPedido, formaPagamento } = createPedidosDto; // extrai as propriedades relevantes do obj createPedidosDto
+      const { userId, filiacaoId, produtos, dataPedido, formaPagamento } = createPedidosDto; // extrai as propriedades relevantes do obj createPedidosDto
       
       const user = await this.userRepository.findOne({ where: { id_user: userId } }); // acha o user pelo id 
       if (!user) {
         throw new HttpException(`Usuário não encontrado.`, HttpStatus.NOT_FOUND);
+      }
+
+      const filiacao = await this.filiacaoRepository.findOne({ where: { id_filiacao: filiacaoId } }); 
+      if (!filiacao) {
+        throw new HttpException(`Endereço não encontrado.`, HttpStatus.NOT_FOUND);
       }
 
       // Variáveis
@@ -65,6 +73,7 @@ export class PedidoService {
 
       //atribui as propriedades ao pedido
       pedido.user = user;
+      pedido.filiacao = filiacao;
       pedido.dataPedido = dataPedido;
       pedido.formaPagamento = formaPagamento;
       pedido.precoTotal = precoTotal;

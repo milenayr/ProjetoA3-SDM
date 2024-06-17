@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { Produto } from './produto.entity';
 import { Expose } from 'class-transformer';
 import { FormaPagamento } from '../enum/formaPagamento';
+import { Filiacao } from './filiacao.entity';
 
 @Entity('pedido')
 export class Pedido {
@@ -21,6 +22,12 @@ export class Pedido {
   @Column({ type: 'enum', enum: FormaPagamento })
   formaPagamento: FormaPagamento;
 
+  @Column()
+  user_id:number
+
+  @Column()
+  filiacao_id:number
+
   @OneToMany(() => Produto, (produto) => produto.pedido)
   @Expose() // incluir esta propriedade na serialização, formatar um objeto para fácil armazenamento ou transmissão
   produtos: Produto[];
@@ -28,5 +35,9 @@ export class Pedido {
   @ManyToOne(() => User, (user) => user.pedidos)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => Filiacao, (filiacao) => filiacao.pedido)
+  @JoinColumn({ name: 'filiacao_id' })
+  filiacao: Filiacao;
 }
 

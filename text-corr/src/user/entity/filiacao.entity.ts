@@ -1,10 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'; 
 import { User } from './user.entity'; 
+import { Pedido } from './pedidos.entity';
 
 @Entity('filiacao')
 export class Filiacao {
   @PrimaryGeneratedColumn()
-  id_perfil: number;
+  id_filiacao: number;
 
   @Column()
   nome: string;
@@ -26,4 +27,7 @@ export class Filiacao {
 
   @ManyToOne(() => User, (user) => user.filiacao) 
   user: User; 
+
+  @ManyToOne(() => Pedido, (pedido) => pedido.filiacao) 
+  pedido: Pedido; 
 }

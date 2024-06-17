@@ -16,7 +16,6 @@ export class PedidoController {
   @ApiResponse({ status: 200, description: 'Lista de pedidos' })
   @Get()
   async findAll(@Req() req) {
-    console.log("batata", req.user.userId)
     const pedidos = await this.pedidoService.findOne(req.user.userId);
     return pedidos}
 

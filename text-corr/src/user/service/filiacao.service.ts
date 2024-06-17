@@ -20,7 +20,7 @@ export class FiliacaoService {
 
   async findOne(id: number): Promise<Filiacao> {
     const filiacao = await this.filiacaoRepository.findOne({
-      where: { id_perfil: id },
+      where: { id_filiacao: id },
       relations: ["user"],
     });
     if (!filiacao) {
