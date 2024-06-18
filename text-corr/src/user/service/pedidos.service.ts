@@ -129,23 +129,17 @@ export class PedidoService {
 
   //função para remover referências circulares
   private removeCircularReferences(pedido: Pedido): Pedido {
-
     // cria uma copia do pedido e inicia uma lista produtos
     const pedidoCopy = { ...pedido, produtos: [] };
-
     // mapeia cada produto para a copia
     pedidoCopy.produtos = pedido.produtos.map(produto => {
-
       // copia de produto
       const produtoCopy = { ...produto };
-
       //Remove a referência circular, deletando o pedido do produto.copy
       delete produtoCopy.pedido; 
-
       //retorna a copia
       return produtoCopy;
     });
-
     // retorna o pedido com os produtos
     return pedidoCopy;
   }

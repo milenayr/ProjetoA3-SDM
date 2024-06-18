@@ -17,7 +17,6 @@ import { Pedido } from './entity/pedidos.entity';
 
 import { PedidoService } from './service/pedidos.service';
 import { PedidoController } from './controller/pedidos.controller';
-import { Repository } from 'typeorm';
 
 @Module({
   imports: [DatabaseModule, TypeOrmModule.forFeature([ User, Filiacao, Produto, Pedido])],
